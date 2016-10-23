@@ -1427,7 +1427,7 @@ class Su_Shortcodes {
 		// Get user data
 		$user = get_user_by( 'id', $atts['user_id'] );
 		// Get user data if user was found
-		$user = ( $user && isset( $user->data->$atts['field'] ) ) ? $user->data->$atts['field'] : $atts['default'];
+		$user = ($user && $user->__isset($atts['field']))?$user->__get($atts['field']):$atts['default'];
 		// Apply cutom filter
 		if ( $atts['filter'] && function_exists( $atts['filter'] ) ) $user = call_user_func( $atts['filter'], $user );
 		// Return result
