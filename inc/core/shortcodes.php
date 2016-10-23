@@ -1418,6 +1418,8 @@ class Su_Shortcodes {
 				'user_id' => '',
 				'filter'  => ''
 			), $atts, 'user' );
+		//return strlen ($atts['user_id']);
+
 		// Check for password requests
 		if ( $atts['field'] === 'user_pass' ) return sprintf( '<p class="su-error">User: %s</p>', __( 'password field is not allowed', 'shortcodes-ultimate' ) );
 		// Define current user ID
@@ -1427,10 +1429,21 @@ class Su_Shortcodes {
 		if ( is_numeric( $atts['user_id'] ) && $atts['user_id'] > 0 ) $user = get_user_by( 'id', $atts['user_id'] );
 		else if( !is_numeric( $atts['user_id'] )) $user = get_user_by('login', $atts['user_id'] );
 		else return sprintf( '<p class="su-error">User: %s</p>', __( 'user ID is incorrect', 'shortcodes-ultimate' ) );
-		// Get user data if user was found
-		$user = ($user && $user->__isset($atts['field']))?$user->__get($atts['field']):$atts['default'];
 		// Apply cutom filter
-		if ( $atts['filter'] && function_exists( $atts['filter'] ) ) $user = call_user_func( $atts['filter'], $user );
+		if ($user && $atts['filter']){
+			$user = preg_replace_callback(
+				"~\{(\w+)\}~",
+				function ($matches) use($user){
+					$field = $matches[1];
+					if ( $field === 'user_pass' ) return '******';
+					return $user->__isset($field)?$user->__get($field):sprintf( '<p class="su-error">User: %s, %s</p>', __( 'field not found', 'shortcodes-ultimate' ), $field);
+				},
+				$atts['filter']);
+		}else if($user && $user->__isset($atts['field'])){
+			$user = $user->__get($atts['field']);
+		}else{
+			$user = $atts['default'];
+		}
 		// Return result
 		return ( $user ) ? $atts['before'] . $user . $atts['after'] : '';
 	}

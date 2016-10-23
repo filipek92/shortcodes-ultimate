@@ -2785,8 +2785,8 @@ class Su_Data {
 						),
 						'filter' => array(
 							'default' => '',
-							'name' => __( 'Filter', 'shortcodes-ultimate' ),
-							'desc' => __( 'You can apply custom filter to the retrieved value. Enter here function name. Your function must accept one argument and return modified value. Example function: ', 'shortcodes-ultimate' ) . "<br /><pre><code style='display:block;padding:5px'>function my_custom_filter( \$value ) {\n\treturn 'Value is: ' . \$value;\n}</code></pre>"
+							'name' => __( 'Fer', 'shortcodes-ultimate' ),
+							'desc' => __( 'You can add custom format, enter here the format. Example:  ', 'shortcodes-ultimate'). '<br /><code style="display:block;padding:5px"><pre><a href="/author/{user_login}">{display_name} ({user_pass})</a></pre></code>',
 						)
 					),
 					'desc' => __( 'User data', 'shortcodes-ultimate' ),
