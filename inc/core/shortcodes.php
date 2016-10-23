@@ -1411,7 +1411,7 @@ class Su_Shortcodes {
 
 	public static function user( $atts = null, $content = null ) {
 		$atts = shortcode_atts( array(
-				'field'   => 'display_name',
+				'field'   => '',
 				'default' => __( 'user ID is incorrect', 'shortcodes-ultimate' ) ,
 				'before'  => '',
 				'after'   => '',
@@ -1429,6 +1429,10 @@ class Su_Shortcodes {
 		if ( is_numeric( $atts['user_id'] ) && $atts['user_id'] > 0 ) $user = get_user_by( 'id', $atts['user_id'] );
 		else if( !is_numeric( $atts['user_id'] )) $user = get_user_by('login', $atts['user_id'] );
 		else return sprintf( '<p class="su-error">User: %s</p>', __( 'user ID is incorrect', 'shortcodes-ultimate' ) );
+		if(!$atts['field'] && !$atts['filter']){
+			$atts['filter'] = '<a href="/author/{user_login}">{display_name}</a>';
+		}
+
 		// Apply cutom filter
 		if ($user && $atts['filter']){
 			$user = preg_replace_callback(
